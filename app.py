@@ -193,7 +193,7 @@ with tab2:
                 i_desc_len = len(profile.biography) if profile.biography else 0
                 i_has_url = True if profile.external_url else False
                 i_is_private = profile.is_private
-                i_has_pic = not profile.is_default_profile_pic 
+                i_has_pic = True if profile.profile_pic_url else False
                 i_posts = profile.mediacount
                 i_followers = profile.followers
                 i_follows = profile.followees
@@ -233,4 +233,5 @@ with tab2:
                 st.error(f"Error details: {e}")
 
                 st.warning("Instagram might have rate-limited the request. Please copy the data visible on Instagram and use the 'Manual Entry' tab.")
+
 
