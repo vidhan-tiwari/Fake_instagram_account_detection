@@ -136,6 +136,7 @@ with tab1:
         m_is_private = st.checkbox("Is Private Account?", value=False)
         m_has_url = st.checkbox("Has External URL in Bio?", value=False)
         m_is_verified = st.checkbox("Has Blue Tick (Verified)?", value=False)
+        st.caption("ℹ️ **Note:** Selecting this bypasses the AI model. Leave unchecked if you want to see the model's output.")
 
     if st.button("Predict (Manual)"):
          
@@ -252,6 +253,7 @@ with tab2:
                 status_placeholder.empty()
                 st.error(f"An unexpected error occurred: {e}")
         
+
 
 
 
