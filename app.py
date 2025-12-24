@@ -9,7 +9,7 @@ import re
 # loading model and  scaler 
 
 @st.cache_resource
-def load_model():
+def load_assets():
     try:
         model = load_model('instagram_fake_detector_ANN.h5')
         scaler = joblib.load('scaler_ANN.pkl') 
@@ -18,7 +18,7 @@ def load_model():
         st.error(f"Error loading model or scaler: {e}")
         return None, None
 
-model, scaler = load_model()
+model, scaler = load_assets()
 
 # Feature engineering helper function
 
@@ -225,4 +225,5 @@ with tab2:
                 status_placeholder.empty()
                 st.error("Failed to fetch data via Instaloader.")
                 st.error(f"Error details: {e}")
+
                 st.warning("Instagram might have rate-limited the request. Please copy the data visible on Instagram and use the 'Manual Entry' tab.")
