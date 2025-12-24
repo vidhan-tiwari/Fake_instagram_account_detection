@@ -138,34 +138,42 @@ with tab1:
         m_is_verified = st.checkbox("Has Blue Tick (Verified)?", value=False)
 
     if st.button("Predict (Manual)"):
-        # missing fields validation
-        missing_fields = []
+         
+        if m_is_verified:
+            # blue tick model by pass
+            st.divider()
+            st.info("ℹ️ Blue Tick detected.")
+            st.success(f"✅ The account **@{m_username}** is Verified. It is definitely **REAL**.")
         
-        # Check strings specifically because they cannot be empty for feature calculations
-        if not m_username.strip():
-            missing_fields.append("Username")
-        if not m_fullname.strip():
-            missing_fields.append("Full Name")
-
-        if missing_fields:
-            st.error(f"⚠️ Missing required fields: {', '.join(missing_fields)}")
-            st.info("The model requires these fields to calculate text ratios (e.g., nums/length).")
         else:
-            try:
-                input_features = extract_features(
-                    m_username, m_fullname, m_desc_len, m_has_url, 
-                    m_is_private, m_has_pic, m_posts, m_followers, m_follows
-                )
-                
-                is_fake, prob = make_prediction(input_features)
-                
-                st.divider()
-                if is_fake:
-                    st.error(f"🚨 This account is likely **FAKE** ({prob:.2%} probability)")
-                else:
-                    st.success(f"✅ This account is likely **REAL** ({(1-prob):.2%} confidence)")
-            except Exception as e:
-                st.error(f"An error occurred during prediction: {e}")
+            # missing field validation check
+            missing_fields = []
+            
+            # Check strings specifically because they cannot be empty for feature calculations
+            if not m_username.strip():
+                missing_fields.append("Username")
+            if not m_fullname.strip():
+                missing_fields.append("Full Name")
+    
+            if missing_fields:
+                st.error(f"⚠️ Missing required fields: {', '.join(missing_fields)}")
+                st.info("The model requires these fields to calculate text ratios (e.g., nums/length).")
+            else:
+                try:
+                    input_features = extract_features(
+                        m_username, m_fullname, m_desc_len, m_has_url, 
+                        m_is_private, m_has_pic, m_posts, m_followers, m_follows
+                    )
+                    
+                    is_fake, prob = make_prediction(input_features)
+                    
+                    st.divider()
+                    if is_fake:
+                        st.error(f"🚨 This account is likely **FAKE** ({prob:.2%} probability)")
+                    else:
+                        st.success(f"✅ This account is likely **REAL** ({(1-prob):.2%} confidence)")
+                except Exception as e:
+                    st.error(f"An error occurred during prediction: {e}")
 
 
 # automated instaloader path
@@ -195,6 +203,7 @@ with tab2:
                 i_has_url = True if profile.external_url else False
                 i_is_private = profile.is_private
                 i_has_pic = True if profile.profile_pic_url else False
+                i_is_verified = profile.is_verified
                 i_posts = profile.mediacount
                 i_followers = profile.followers
                 i_follows = profile.followees
@@ -211,29 +220,39 @@ with tab2:
                         "Followers": i_followers,
                         "Following": i_follows
                     })
+
+                status_placeholder.empty() # Clear status
+
+                st.divider()
                 
-                input_features = extract_features(
+                 # LOGIC CHECK FOR BLUE TICK
+                if i_is_verified:
+                    st.info("ℹ️ Instagram API confirms this account has a Blue Tick.")
+                    st.success(f"✅ The account **@{i_username}** is Verified. It is definitely **REAL**.")
+                else:
+                    input_features = extract_features(
                     i_username, i_fullname, i_desc_len, i_has_url, 
                     i_is_private, i_has_pic, i_posts, i_followers, i_follows
-                )
+                    )
                 
-                # Predict
-                is_fake, prob = make_prediction(input_features)
-                
-                status_placeholder.empty() # Clear status
-                
-                st.divider()
-                if is_fake:
-                    st.error(f"🚨 This account is likely **FAKE** ({prob:.2%} probability)")
-                else:
-                    st.success(f"✅ This account is likely **REAL** ({(1-prob):.2%} confidence)")
+                    # Predict
+                    is_fake, prob = make_prediction(input_features)
+                    if is_fake:
+                        st.error(f"🚨 This account is likely **FAKE** ({prob:.2%} probability)")
+                    else:
+                        st.success(f"✅ This account is likely **REAL** ({(1-prob):.2%} confidence)")
                     
+            except instaloader.ConnectionException:
+                status_placeholder.empty()
+                st.error("Connection Error: Instagram refused the connection. Try again later or use Manual Entry.")
+            except instaloader.LoginRequiredException:
+                status_placeholder.empty()
+                st.error("Login Error: Instagram requires login to view this profile. Please use Manual Entry.")
             except Exception as e:
                 status_placeholder.empty()
-                st.error("Failed to fetch data via Instaloader.")
-                st.error(f"Error details: {e}")
+                st.error(f"An unexpected error occurred: {e}")
+        
 
-                st.warning("Instagram might have rate-limited the request. Please copy the data visible on Instagram and use the 'Manual Entry' tab.")
 
 
 
