@@ -105,11 +105,10 @@ st.title("🕵️ Instagram Fake Account Detector")
 st.markdown("Use this tool to analyze Instagram accounts using Deep Learning.")
 
 # Tabs for selection
-tab2, tab1 = st.tabs(["📝 Manual Entry", "🤖 Auto (Instaloader)"])
+tab1, tab2 = st.tabs(["AUTOMATIC PATHWAY "," Manual-DATA-Entry PATHWAY "])
 
-# manual entry path
-# --- TAB 1: MANUAL ENTRY ---
-with tab1:
+
+with tab2:
     st.header("Manual Data Entry")
     st.write("Enter the profile details manually:")
     
@@ -178,7 +177,7 @@ with tab1:
 
 
 # automated instaloader path
-with tab2:
+with tab1:
     st.header("Automatic Fetching")
     st.info("Note: Instagram blocks frequent anonymous requests. If this fails, use Manual Entry.")
     
@@ -253,6 +252,7 @@ with tab2:
                 status_placeholder.empty()
                 st.error(f"An unexpected error occurred: {e}")
         
+
 
 
 
