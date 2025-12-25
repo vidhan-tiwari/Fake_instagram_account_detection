@@ -28,7 +28,7 @@ Three models were trained and evaluated during the research phase. The **ANN** w
 | **Logistic Regression (Lasso)** | 90.0% | Scikit-learn implementation with L1 regularization. |
 | **Logistic Regression (Custom)** | ~90.0% | Custom NumPy implementation from scratch. |
 
-*Note: The ANN achieved a validation accuracy of ~96% by Epoch 48/100.*
+*Note: The ANN achieved a validation accuracy of ~97% by Epoch 50/50.*
 
 ## 📂 Repository Structure
 
@@ -39,7 +39,7 @@ The repository consists of **9 main files**:
 | `app.py` | The main Streamlit application containing the UI, feature engineering logic, and prediction pipeline. |
 | `InstaFakeID_Detection_v_1.ipynb` | Research notebook containing data preprocessing and a **Custom Logistic Regression** implementation using NumPy. |
 | `InstaFakeID_Detection.ipynb` | Research notebook containing **Scikit-learn Lasso (L1)** Logistic Regression models. |
-| `fake_insta_ANN.ipynb` | Research notebook containing the **ANN** architecture design, training, and evaluation. |
+| `fake_insta_ANN_.ipynb` | Research notebook containing the **ANN** architecture design, training, and evaluation. |
 | `instagram_fake_detector_ANN.h5` | The trained Artificial Neural Network model saved in H5 format. |
 | `scaler_ANN.pkl` | The standard scaler object (Joblib) used to normalize input features before prediction. |
 | `requirements.txt` | List of Python dependencies required to run the project. |
